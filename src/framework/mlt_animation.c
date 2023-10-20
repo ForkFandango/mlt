@@ -74,35 +74,35 @@ struct
     {mlt_keyframe_smooth_loose, "~"},
     {mlt_keyframe_smooth_natural, "$"},
     {mlt_keyframe_smooth_tight, "-"},
-    {mlt_keyframe_sinusoidal_in, "a"},
-    {mlt_keyframe_sinusoidal_out, "b"},
+    {mlt_keyframe_sinusoidal_out, "a"},
+    {mlt_keyframe_sinusoidal_in, "b"},
     {mlt_keyframe_sinusoidal_in_out, "c"},
-    {mlt_keyframe_quadratic_in, "d"},
-    {mlt_keyframe_quadratic_out, "e"},
+    {mlt_keyframe_quadratic_out, "d"},
+    {mlt_keyframe_quadratic_in, "e"},
     {mlt_keyframe_quadratic_in_out, "f"},
-    {mlt_keyframe_cubic_in, "g"},
-    {mlt_keyframe_cubic_out, "h"},
+    {mlt_keyframe_cubic_out, "g"},
+    {mlt_keyframe_cubic_in, "h"},
     {mlt_keyframe_cubic_in_out, "i"},
-    {mlt_keyframe_quartic_in, "j"},
-    {mlt_keyframe_quartic_out, "k"},
+    {mlt_keyframe_quartic_out, "j"},
+    {mlt_keyframe_quartic_in, "k"},
     {mlt_keyframe_quartic_in_out, "l"},
-    {mlt_keyframe_quintic_in, "m"},
-    {mlt_keyframe_quintic_out, "n"},
+    {mlt_keyframe_quintic_out, "m"},
+    {mlt_keyframe_quintic_in, "n"},
     {mlt_keyframe_quintic_in_out, "o"},
-    {mlt_keyframe_exponential_in, "p"},
-    {mlt_keyframe_exponential_out, "q"},
+    {mlt_keyframe_exponential_out, "p"},
+    {mlt_keyframe_exponential_in, "q"},
     {mlt_keyframe_exponential_in_out, "r"},
-    {mlt_keyframe_circular_in, "s"},
-    {mlt_keyframe_circular_out, "t"},
+    {mlt_keyframe_circular_out, "s"},
+    {mlt_keyframe_circular_in, "t"},
     {mlt_keyframe_circular_in_out, "u"},
-    {mlt_keyframe_back_in, "v"},
-    {mlt_keyframe_back_out, "w"},
+    {mlt_keyframe_back_out, "v"},
+    {mlt_keyframe_back_in, "w"},
     {mlt_keyframe_back_in_out, "x"},
-    {mlt_keyframe_elastic_in, "y"},
-    {mlt_keyframe_elastic_out, "z"},
+    {mlt_keyframe_elastic_out, "y"},
+    {mlt_keyframe_elastic_in, "z"},
     {mlt_keyframe_elastic_in_out, "A"},
-    {mlt_keyframe_bounce_in, "B"},
-    {mlt_keyframe_bounce_out, "C"},
+    {mlt_keyframe_bounce_out, "B"},
+    {mlt_keyframe_bounce_in, "C"},
     {mlt_keyframe_bounce_in_out, "D"},
 };
 
@@ -1130,9 +1130,9 @@ static inline double sinusoidal_interpolate(double y1, double y2, double t, ease
 {
     double factor = 0;
     if (ease == ease_in) {
-        factor = sin((t - 1) * M_PI_2) + 1;
-    } else if (ease == ease_out) {
         factor = sin(t * M_PI_2);
+    } else if (ease == ease_out) {
+        factor = sin((t - 1) * M_PI_2) + 1;
     } else { // ease_inout
         factor = 0.5 * (1 - cos(t * M_PI));
     }
@@ -1143,9 +1143,9 @@ static inline double power_interpolate(double y1, double y2, double t, double or
 {
     double factor = 0;
     if (ease == ease_in) {
-        factor = pow(t, order);
-    } else if (ease == ease_out) {
         factor = 1 - pow(1 - t, order);
+    } else if (ease == ease_out) {
+        factor = pow(t, order);
     } else { // ease_inout
         if (t < 0.5) {
             factor = pow(2, order) * pow(t, order) / 2;
@@ -1164,9 +1164,9 @@ static inline double exponential_interpolate(double y1, double y2, double t, eas
     } else if (t == 1.0) {
         factor = 1.0;
     } else if (ease == ease_in) {
-        factor = pow(2.0, 10 * t - 10);
-    } else if (ease == ease_out) {
         factor = 1.0 - pow(2.0, -10 * t);
+    } else if (ease == ease_out) {
+        factor = pow(2.0, 10 * t - 10);
     } else { // ease_inout
         if (t < 0.5) {
             factor = pow(2, 20 * t - 10) / 2;
@@ -1181,9 +1181,9 @@ static inline double circular_interpolate(double y1, double y2, double t, ease_t
 {
     double factor = 0;
     if (ease == ease_in) {
-        factor = 1.0 - sqrt(1.0 - pow(t, 2.0));
-    } else if (ease == ease_out) {
         factor = sqrt(1.0 - pow(t - 1.0, 2.0));
+    } else if (ease == ease_out) {
+        factor = 1.0 - sqrt(1.0 - pow(t, 2.0));
     } else { // ease_inout
         if (t < 0.5) {
             factor = 0.5 * (1 - sqrt(1 - 4 * (t * t)));
@@ -1198,10 +1198,10 @@ static inline double back_interpolate(double y1, double y2, double t, ease_type 
 {
     double factor = 0;
     if (ease == ease_in) {
-        factor = t * t * t - t * sin(t * M_PI);
-    } else if (ease == ease_out) {
         double f = (1 - t);
         factor = 1 - (f * f * f - f * sin(f * M_PI));
+    } else if (ease == ease_out) {
+        factor = t * t * t - t * sin(t * M_PI);
     } else { // ease_inout
         if (t < 0.5) {
             double f = 2 * t;
@@ -1218,9 +1218,9 @@ static inline double elastic_interpolate(double y1, double y2, double t, ease_ty
 {
     double factor = 0;
     if (ease == ease_in) {
-        factor = sin(13 * M_PI_2 * t) * pow(2, 10 * (t - 1));
-    } else if (ease == ease_out) {
         factor = sin(-13 * M_PI_2 * (t + 1)) * pow(2, -10 * t) + 1;
+    } else if (ease == ease_out) {
+        factor = sin(13 * M_PI_2 * t) * pow(2, 10 * (t - 1));
     } else { // ease_inout
         if (t < 0.5) {
             factor = 0.5 * sin(13 * M_PI_2 * (2 * t)) * pow(2, 10 * ((2 * t) - 1));
@@ -1235,8 +1235,6 @@ static inline double bounce_interpolate(double y1, double y2, double t, ease_typ
 {
     double factor = 0;
     if (ease == ease_in) {
-        factor = 1.0 - bounce_interpolate(0.0, 1.0, 1.0 - t, ease_out);
-    } else if (ease == ease_out) {
         if (t < 4 / 11.0) {
             factor = (121 * t * t) / 16.0;
         } else if (t < 8 / 11.0) {
@@ -1246,6 +1244,8 @@ static inline double bounce_interpolate(double y1, double y2, double t, ease_typ
         } else {
             factor = (54 / 5.0 * t * t) - (513 / 25.0 * t) + 268 / 25.0;
         }
+    } else if (ease == ease_out) {
+        factor = 1.0 - bounce_interpolate(0.0, 1.0, 1.0 - t, ease_out);
     } else { // ease_inout
         if (t < 0.5) {
             factor = 0.5 * bounce_interpolate(0.0, 1.0, t * 2, ease_in);
@@ -1364,6 +1364,27 @@ static int interpolate_item(mlt_animation_item item,
 {
     int error = 0;
     double progress = (double) (item->frame - p[1]->frame) / (double) (p[2]->frame - p[1]->frame);
+    mlt_keyframe_type kt = item->keyframe_type;
+
+    // If the next keyframe has an ease-in
+    if (p[2] && p[2]->keyframe_type >= mlt_keyframe_sinusoidal_in
+        && p[2]->keyframe_type <= mlt_keyframe_bounce_in_out) {
+        // Use the next keyframe's interpolation
+        kt = p[2]->keyframe_type;
+        if (p[2]->keyframe_type >= mlt_keyframe_sinusoidal_in_out)
+            // Use the corresponding ease-in
+            kt -= mlt_keyframe_sinusoidal_in_out - mlt_keyframe_sinusoidal_in;
+
+        // If the current keyframe is an ease-in-out
+    } else if (kt >= mlt_keyframe_sinusoidal_in_out && kt <= mlt_keyframe_bounce_in_out) {
+        // Use the corresponding ease-out
+        kt += mlt_keyframe_sinusoidal_out - mlt_keyframe_sinusoidal_in_out;
+
+        // If the current keyframe has an ease-in
+    } else if (kt >= mlt_keyframe_sinusoidal_in && kt < mlt_keyframe_sinusoidal_out) {
+        kt = mlt_keyframe_linear;
+    }
+
     if (item->keyframe_type == mlt_keyframe_discrete) {
         mlt_property_pass(item->property, p[1]->property);
     } else if (mlt_property_is_color(p[1]->property)) {
@@ -1384,7 +1405,7 @@ static int interpolate_item(mlt_animation_item item,
                                               p[3]->frame,
                                               colors[3].r,
                                               progress,
-                                              item->keyframe_type),
+                                              kt),
                             0,
                             255);
             value.g = CLAMP(interpolate_value(p[0]->frame,
@@ -1396,7 +1417,7 @@ static int interpolate_item(mlt_animation_item item,
                                               p[3]->frame,
                                               colors[3].g,
                                               progress,
-                                              item->keyframe_type),
+                                              kt),
                             0,
                             255);
             value.b = CLAMP(interpolate_value(p[0]->frame,
@@ -1408,7 +1429,7 @@ static int interpolate_item(mlt_animation_item item,
                                               p[3]->frame,
                                               colors[3].b,
                                               progress,
-                                              item->keyframe_type),
+                                              kt),
                             0,
                             255);
             value.a = CLAMP(interpolate_value(p[0]->frame,
@@ -1420,7 +1441,7 @@ static int interpolate_item(mlt_animation_item item,
                                               p[3]->frame,
                                               colors[3].a,
                                               progress,
-                                              item->keyframe_type),
+                                              kt),
                             0,
                             255);
         } else {
@@ -1445,7 +1466,7 @@ static int interpolate_item(mlt_animation_item item,
                                         p[3]->frame,
                                         points[3].x,
                                         progress,
-                                        item->keyframe_type);
+                                        kt);
             value.y = interpolate_value(p[0]->frame,
                                         points[0].y,
                                         p[1]->frame,
@@ -1455,7 +1476,7 @@ static int interpolate_item(mlt_animation_item item,
                                         p[3]->frame,
                                         points[3].y,
                                         progress,
-                                        item->keyframe_type);
+                                        kt);
             value.w = interpolate_value(p[0]->frame,
                                         points[0].w,
                                         p[1]->frame,
@@ -1465,7 +1486,7 @@ static int interpolate_item(mlt_animation_item item,
                                         p[3]->frame,
                                         points[3].w,
                                         progress,
-                                        item->keyframe_type);
+                                        kt);
             value.h = interpolate_value(p[0]->frame,
                                         points[0].h,
                                         p[1]->frame,
@@ -1475,7 +1496,7 @@ static int interpolate_item(mlt_animation_item item,
                                         p[3]->frame,
                                         points[3].h,
                                         progress,
-                                        item->keyframe_type);
+                                        kt);
             value.o = interpolate_value(p[0]->frame,
                                         points[0].o,
                                         p[1]->frame,
@@ -1485,7 +1506,7 @@ static int interpolate_item(mlt_animation_item item,
                                         p[3]->frame,
                                         points[3].o,
                                         progress,
-                                        item->keyframe_type);
+                                        kt);
         } else {
             value = points[1];
         }
@@ -1506,7 +1527,7 @@ static int interpolate_item(mlt_animation_item item,
                                          p[3]->frame,
                                          points[3],
                                          progress,
-                                         item->keyframe_type)
+                                         kt)
                      : points[1];
         error = mlt_property_set_double(item->property, value);
     } else {
